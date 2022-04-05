@@ -1,3 +1,3 @@
 # MajorProject
 
-Project on building a website on Twitter sentiment analysis through flask
+Web based Twitter Sentiment Analysis with Flask.
