@@ -42,7 +42,7 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center justify-content-lg-between">
 
-      <h1 class="logo me-auto me-lg-0"><a href="/templates/index.html">OpinionPoint<span>.</span></a></h1>
+      <h1 class="logo me-auto me-lg-0"><a href="/">OpinionPoint<span>.</span></a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
@@ -52,7 +52,6 @@
           <li><a class="nav-link scrollto" href="#about">About</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a class="nav-link scrollto" href="#reviews">Reviews</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -164,105 +163,38 @@
         <div style="justify-content: center;margin: auto">
             <form  method="post" enctype="multipart/form-data" action="sentiment_logic">
                 <div class="form-group">      
-                    <input type="text" class="form-control" name="topic" placeholder="Search Keyword here"/>
+                    <input type="text" class="form-control" name="keyword" placeholder="Search Keyword here..."/>
                 </div>
 
                 <br>
 
+                <div class="form-group">      
+                  <input type="number" class="form-control" name="tweets" placeholder="Enter the number of tweets to analyse here..."/>
+              </div>
+
+              <br>
+
+              <label for="fromDate">From Date: </label><br>
+                <div class="form-group"> 
+                  <input type="date" class="form-control" id="fromDate" name="fromDate"/>
+              </div>
+
+              <br>
+
+              <label for="toDate">To Date: </label><br>
+                <div class="form-group"> 
+                  <input type="date" class="form-control" id="toDate" name="toDate"/>
+              </div>
+
+              <br>
+
                 <div class="text-center">
-                  <button type="button" class="analyse-btn"><a href="#portfolio">Analyse</a></button>
+                  <input type="submit" class="analyse-btn" value="Analyse">
                 </div>
             </form>
         </div>
       </div>
     </section><!-- End Services Section -->
-
-  
-
-    <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Statistics</h2>
-          
-        </div>
-
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
-          <div class="col-lg-12 d-flex justify-content-center">
-            <ul id="portfolio-flters">
-              <li data-filter="*" class="filter-active">All</li>
-              <div style="text-align: center;">
-                <div >
-                   {% if polarity %}
-                   <h3 style="color: black; text-align: center;font-size:20px; border-radius: 25px;">How are people reacting on {{keyword}} by analyzing {{tweets}} Tweets</h3>
-                   {% endif %}
-                </div>
-             </div>
-            <!--parent div for reports--> 
-            <br><br><br>       
-            <div class="row">         
-              <div>         
-                <!--General sentiment report-->         
-                <div class="row">         
-                  <div class="mt-100">         
-                    <h4 style="color: black; text-align: center;font-size:30px">General Report</h4>         
-                    <div class="alert alert-info" role="alert" style="height:70px;width:600px;margin:auto">         
-                      {% if polarity %}         
-                      <h2 style="text-align:center;font-size:25px"> The Average Sentiment is {{htmlpolarity}} </h2>         
-                      {%endif%}         
-                    </div>         
-                  </div>         
-                </div>  
-                <br><br>       
-                <!--end of general report-->         
-                <!--start of polarity value-->         
-                <div class="row">         
-                  <div class="mt-100">        
-                    <h4 style="color: black; text-align: center;font-size:30px">Sentiment Polarity</h4>          
-                  <div class="alert alert-info" role="alert" style="height:70px;width:600px;margin:auto">          
-                      {% if polarity %}          
-                      <h4 style="text-align: center;font-size:25px"> The sentiment polarity is {{polarity}} </h4>           
-                      {%endif%}            
-                    </div>            
-                  </div>            
-                </div>           
-                <!--end of polarity value-->           
-              </div>           
-              <!-- end of parent div for reports-->
-            </div>            
-            <div style="margin-top: 50px">           
-              <h3 style="color: black; text-align: center;font-size:30px">Detailed Report</h3>           
-              <div class="alert alert-info" role="alert" style="height:350px;width:750px;margin:auto">           
-                {% if polarity %}           
-                <h4 class="report-text"> {{spositive}} "% people thought it was strongly positive"</h4>           
-                <h4 class="report-text"> {{positive}} "% people thought it was positive"</h4>           
-                <h4 class="report-text"> {{wpositive}} "% people thought it was weakly positive"</h4>           
-                <h4 class="report-text"> {{neutral}} "% people thought it was neutral"</h4>           
-                <h4 class="report-text"> {{negative}} "% people thought it was negative"</h4>        
-                <h4 class="report-text"> {{wnegative}} "% people thought it was weakly negative"</h4>
-                <h4 class="report-text"> {{snegative}} "% people thought it was strongly negative"</h4> 
-                {%endif%}
-              </div>
-            </div>         
-            <!--end of report-->
-            <br><br><br>
-              <li data-filter=".filter-app">Pie Chart</li>
-              <div class="mt-100" style="padding-top: 100px; text-align: center">            
-                <img src="static/img/about.jpg">            
-              </div>
-              <br><br>
-              <li data-filter=".filter-card">Bar Graph</li>
-              <li data-filter=".filter-web">Histogram</li>
-            </ul>
-          </div>
-        </div>
-        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-        </div>
-      </div>
-    </section><!-- End Portfolio Section -->
-
-
 
     <!-- ======= Team Section ======= -->
     <section id="team" class="team">
@@ -314,7 +246,7 @@
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="300">
               <div class="member-img">
-                <img src="static/img/team/team-1.jpg" class="img-fluid" alt="">
+                <img src="static/img/team/team-4.jpg" class="img-fluid" alt="">
                 <div class="social">
                   <a href=""><i class="bi bi-twitter"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>
