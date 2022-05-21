@@ -7,6 +7,10 @@ import snscrape.modules.twitter as sntwitter
 import re
 import matplotlib
 import datetime
+import seaborn as sns
+import pandas as pd
+nltk.download('words')
+stop_words = set(nltk.corpus.words.words())
 
 app = Flask(__name__)
 
@@ -97,7 +101,21 @@ class SentimentAnalysis:
             htmlcompound = "Neutral :|"
  
         # call plotPieChart to generate pie chart visual
-        self.plotPieChart(positive, negative, neutral, kw)
+        self.plotPieChart(positive, negative, neutral, kw)        
+        plt.clf()
+
+        #To get all words from all the tweets
+        all_words=[]
+        for tweet in self.tweetContent:
+            words = ''.join([i for i in tweet if not i.isdigit()])
+            words = re.findall(r'\w+', words)
+            for word in words:
+                if word.lower() == keyword.lower() or word.lower() in stop_words or word.lower() == "has": continue
+                all_words.append(word.lower())
+        
+        #Call the plotWordCount to generate bar graph visual
+        self.plotWordCount(all_words)
+        plt.clf()
 
         return compound, htmlcompound, positive, negative, neutral, keyword, len(self.tweetContent), fromDate, toDate
  
@@ -128,15 +146,48 @@ class SentimentAnalysis:
         plt.tight_layout()
 
         # set path to save pie chart plot
-        strFile = r"C:\Users\Clinton\Documents\GitHub\MajorProject\static\img\plots\plot1.png"
+        strFile = r"static\img\plots\plot1.png"
         if os.path.isfile(strFile):
             os.remove(strFile)  # Opt.: os.system("rm "+strFile)
 
         # save the pie chart plot
         plt.savefig(strFile)
-        plt.show()
  
- 
+    # function which sets and plots the pie chart. The chart is saved in an img file every time the project is run.
+    def plotWordCount(self, words):
+        data = dict()
+        for word in words:
+            word = word.lower()
+            if word in stop_words:
+                continue
+            data[word] = data.get(word, 0) + 1
+
+        #Sorting the dictionary so we can slice the first 10 values from it
+        sorted_words = dict(sorted(data.items(), key = lambda x: x[1], reverse = True))
+        sorted_words = {k: sorted_words[k] for k in list(sorted_words)[:20]}
+        #Create and generate a pic of bar graph
+        keys = list(sorted_words.keys())
+        vals = [int(sorted_words[k]) for k in keys]
+        sns.set(rc = {'figure.figsize':(20,20)})
+        #plt.bar(range(len(sorted_words)), vals, tick_label=keys)
+        dataset = {'Words Used': keys,
+                'Count': vals} 
+        new = pd.DataFrame.from_dict(dataset)
+        ax = sns.barplot(
+            x="Words Used", 
+            y="Count",  
+            data = new,
+            palette=sns.color_palette("bright")
+            )
+        #ax = sns.barplot(x=keys,y=vals)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
+        plt.tight_layout()
+        # set path to save pie chart plot
+        strFile2 = r"static\img\plots\plot2.png"
+        if os.path.isfile(strFile2):
+            os.remove(strFile2)  # Opt.: os.system("rm "+strFile)
+        plt.savefig(strFile2)
+        #print(sorted_words)
 
 @app.route('/sentiment_logic', methods=['POST', 'GET'])
 def sentiment_logic():
@@ -159,3 +210,6 @@ def sentiment_logic():
 @app.route('/visualize')
 def visualize():
     return render_template('PieChart.html')
+# @app.route('/visualize1')
+# def visualize1():
+#     return render_template('piechart2.html')
